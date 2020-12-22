@@ -3,8 +3,6 @@ import { Grid, Typography } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Button from '@material-ui/core/Button';
 import ChipInput from 'material-ui-chip-input';
-import Select from 'react-select-plus';
-import 'react-select-plus/dist/react-select-plus.css';
 import './App.css';
 
 function App() {
