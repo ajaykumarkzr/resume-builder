@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Button from '@material-ui/core/Button';
+import ChipInput from 'material-ui-chip-input';
 import Select from 'react-select-plus';
 import 'react-select-plus/dist/react-select-plus.css';
 import './App.css';
@@ -18,10 +19,26 @@ function App() {
   const [expAdd, setExpAdd] = useState(false);
   const [experienceVar, setExperienceVar] = useState({});
 
+  const [chipArray, setChipArray] = useState([]);
 
-  const logChange = (val) => {
-    console.log(val)
+  const handleAddChip = (chip) => {
+      let chipCopy = chipArray
+      chipCopy = [...chipCopy, chip]
+      setChipArray(chipCopy)
   }
+  
+  const handleDeleteChip = async (chip, index) => {
+    let chipCopy = chipArray
+    if (chipArray[index] === chip){
+      await chipCopy.splice(index, 1)
+      await setChipArray(chipCopy)
+      console.log(chip, ' deleted')
+    }
+    
+    console.log(chipCopy)
+    
+  }  
+  useEffect(() => {}, [chipArray])
 
   const EducationField = (edu, i) => {
     return(
@@ -189,19 +206,29 @@ function App() {
               <Grid container style={{marginTop: '2vh'}}>
                   <Grid item xs={3}></Grid>
                   <Grid item xs={6}>
-                    <Select
-                      name="form-field-name"
-                      value="one"
-                      onChange={(val) => logChange(val)}
-                      options={[
-                        { value: 'one', label: 'One' },
-                        { value: 'two', label: 'Two' },
-                      ]}
+                    <ChipInput
+                      newChipKeys={['Enter', ',']}
+                      InputProps={{
+                        color: 'primary',
+                        // autoFocus: true,
+                        autoComplete: 'react'
+                      }}
+                      dataSource={['react', 'react native', 'java', 'python', 'kotlin', 'dart', 'javascript', 'C', 'C#', 'C++', 'angular', 'PHP']}
+                                  value={chipArray}
+                      onAdd={(chip) => handleAddChip(chip)}
+                      onDelete={(chip, index) => {
+                        handleDeleteChip(chip, index)
+                        
+                      }}
+                      placeholder="ADD SKILL"
+                      variant="filled"
                     />
                   </Grid>
                   <Grid item xs={3}></Grid>
               </Grid>
-              
+                {
+                  experience.map(ExperienceField)
+                }
                 <div>
 
                 </div>
