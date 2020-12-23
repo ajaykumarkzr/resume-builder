@@ -1,0 +1,23 @@
+.containerCard {
+    padding: 2rem;
+    margin: 2rem;
+}
+
+.section {
+    margin-top: 2rem;
+}
+
+.fieldName {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: larger;
+    font-weight: bolder;
+    font-style: initial;
+    border-left: 1rem;
+    border-color: black;
+}
+
+.field {
+    margin-top: 10px;
+    border-left: 2rem;
+    border-color: black;
+}

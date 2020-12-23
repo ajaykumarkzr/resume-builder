@@ -1,102 +1,127 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Button from '@material-ui/core/Button';
-import ChipInput from 'material-ui-chip-input';
+
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+
+import Gen from './components/gen';
 import './App.css';
 
 function App() {
 
-  const [basic, setBasic] = useState({});
+  const [basic, setBasic] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: ''
+  });
+
   const [education, setEducation] = useState([]);
-  const [educationVar, setEducationVar] = useState('');
+  const [educationVar, setEducationVar] = useState({
+    class: '',
+    school: '',
+    duration: '',
+    course: ''
+  });
   const [eduAdd, setEduAdd] = useState(false);
   const [dropDownElem, setDropDownElem] = useState('Select');
+
+  const [skills, setSkills] = useState(null);
 
   const [experience, setExperience] = useState([]);
   const [expAdd, setExpAdd] = useState(false);
   const [experienceVar, setExperienceVar] = useState({});
 
-  const [chipArray, setChipArray] = useState([]);
+  const options = [
+    { value: 'react', label: 'react' },
+    { value: 'react native', label: 'react native' },
+    { value: 'java', label: 'java' },
+    { value: 'javascript', label: 'javascript' },
+    { value: 'C', label: 'C' },
+    { value: 'C++', label: 'C++' },
+    { value: 'C#', label: 'C#' },
+    { value: 'Python', label: 'Python' },
+    { value: 'MYSQL', label: 'MYSQL' },
+    { value: 'Dart', label: 'Dart' },
+    { value: 'Flutter', label: 'Flutter' },
+    { value: 'Linux', label: 'Linux' },
+    { value: 'git', label: 'git' },
+  ];
+  const animatedComponents = makeAnimated();
 
-  const handleAddChip = (chip) => {
-      let chipCopy = chipArray
-      chipCopy = [...chipCopy, chip]
-      setChipArray(chipCopy)
-  }
   
-  const handleDeleteChip = async (chip, index) => {
-    let chipCopy = chipArray
-    if (chipArray[index] === chip){
-      await chipCopy.splice(index, 1)
-      await setChipArray(chipCopy)
-      console.log(chip, ' deleted')
-    }
-    
-    console.log(chipCopy)
-    
-  }  
-  useEffect(() => {}, [chipArray])
+  const [submitted, SetSubmitted] = useState(true);
+  const [submitData, setSubmitData] = useState(null);
+
+  const editData = (i) => {
+    alert('working')
+    setBasic(i.basic)
+    setEducation(i.education)
+    setExperience(i.experience)
+    setSkills(i.skills)
+    setEduAdd(true)
+    setExpAdd(true)
+    SetSubmitted(false)
+  }
 
   const EducationField = (edu, i) => {
     return(
-      <view key={i}>
+      <div key={i}>
         <br />
-          <Typography style={{color: "white"}}>
-            {edu}
+          <Typography>
+            {edu.school}
           </Typography>
-      </view>
+      </div>
     )
   }
 
   const ExperienceField = (exp, i) => {
-    console.log(exp)
     return(
-      <view key={i}>
+      <div key={i}>
         <Grid container style={{marginTop: '2vh'}}>
-          <Grid item xs={3}><Typography style={{color: "white"}}>{exp.duration}</Typography></Grid>
-          <Grid item xs={3}><Typography style={{color: "white"}}>{exp.company}</Typography></Grid>
-          <Grid item xs={3}><Typography style={{color: "white"}}>{exp.position}</Typography></Grid>
+          <Grid item xs={3}><Typography>{exp.duration}</Typography></Grid>
+          <Grid item xs={3}><Typography>{exp.company}</Typography></Grid>
+          <Grid item xs={3}><Typography>{exp.position}</Typography></Grid>
           <Grid item xs={3}></Grid>
         </Grid>
-      </view>
+      </div>
     )
   }
 
+  if (!submitted){
   return (
     <div className="App">
       <div className="App-header">
         <form>
-            <input type="text" id="name" name="name" style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
-              let basicCopy = basic
-              basicCopy.name = event.target.value
-              setBasic(basicCopy)
+            <input type="text" id="name" name="name" value={basic.name} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
+                setBasic({...basic, name: event.target.value})
               }} placeholder="NAME" /> <br />
-            <input type="text" id="email" name="email" style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
-              let basicCopy = basic
-              basicCopy.email = event.target.value
-              setBasic(basicCopy)
+            <input type="text" id="email" name="email" value={basic.email} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
+                setBasic({...basic, email: event.target.value})
               }} placeholder="EMAIL" /> <br />
-            <input type="text" id="address" name="address" style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
-              let basicCopy = basic
-              basicCopy.address = event.target.value
+            <input type="text" id="address" name="address" value={basic.address} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
+              setBasic({...basic, address: event.target.value})
             }} placeholder="ADDRESS" /> <br />
-            <input type="text" id="phone" name="phone" style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
-              let basicCopy = basic
-              basicCopy.phone = event.target.value
+            <input type="text" id="phone" name="phone" value={basic.phone} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
+              setBasic({...basic, phone: event.target.value})
             }} placeholder="PHONE" /> <br />
-        </form>
+        
         <div style={{marginTop: '2vh'}}>
-            <Typography style={{color: "white"}}>EDUCATION</Typography>
+            <Typography>EDUCATION</Typography>
           {
             education.map(EducationField)
           }
           <div style={{marginTop: '2vh'}}>
-            {eduAdd ? <AddCircleIcon style={{color: "white"}} onClick={() => setEduAdd(false)} /> : 
+            {eduAdd ? <AddCircleIcon onClick={() => setEduAdd(false)} /> : 
               <div style={{marginTop: '2vh'}}>
                 <Grid container style={{marginTop: '2vh'}}>
                   <Grid item xs={3} style={{alignItems: 'left'}} >
-                    <select value={dropDownElem} onChange={(event) => {setDropDownElem(event.target.value)}}>
+                    <select value={dropDownElem} onChange={(event) => {
+                      setEducationVar({...educationVar, class: event.target.value})
+                      setDropDownElem(event.target.value)
+                    }}>
                       <option value="Select">Select</option>
                       <option value="10">10</option>
                       <option value="12">12</option>
@@ -104,20 +129,31 @@ function App() {
                       <option value="Other"> Other</option>
                     </select>
                   </Grid>
-                  <Grid item xs={6} style={{alignItems: 'left'}}>
-                    <input type="text" name="education" style={{width: '30vw'}} value={educationVar} onChange={(event) => {
-                      setEducationVar(event.target.value)
-                    }} placeholder="ADD EDUCATION" />
+                  <Grid item xs={4} style={{alignItems: 'left'}}>
+                    <input type="text" required={true} name="education" style={{width: '30vw'}} value={educationVar.school} onChange={(event) => {
+                      setEducationVar({...educationVar, school: event.target.value})
+                    }} placeholder="ADD SCHOOL" />
                   </Grid>
                   <Grid item xs={2}>
-                    <input type="text" name="eduDuration" placeholder="duration" />
+                    <input type="text" name="" placeholder="course" onChange={(event) => {
+                      setEducationVar({...educationVar, course: event.target.value})
+                    }} />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <input type="text" name="eduDuration" placeholder="duration" onChange={(event) => {
+                      setEducationVar({...educationVar, duration: event.target.value})
+                    }} />
                   </Grid>
                   <Grid item xs={1} >
-                    <Button variant="contained" onClick={() => {
-                      if(educationVar.length > 3){
-                        setEducation([...education, educationVar])
-                        setEducationVar("")
-                        setEduAdd(true)
+                    <Button variant="contained" onClick={async () => {
+                      if(educationVar.school.length > 2){
+                        await setEducation([...education, educationVar])
+                        await setEducationVar({
+                          class: '',
+                          school: '',
+                          duration: ''
+                        })
+                        await setEduAdd(true)
                       } else {
                         alert('add valid details')
                       }
@@ -134,42 +170,36 @@ function App() {
                 <Grid item xs={3} style={{display: 'flex', justifyContent: 'center'}}>
                 </Grid>
               <Grid item xs={6} style={{justifyContent: 'center'}}>
-                <Typography style={{color: "white"}}>EXPERIENCE</Typography>
+                <Typography>EXPERIENCE</Typography>
               </Grid>
               <Grid item xs={3}></Grid>
               </Grid>
               <Grid container style={{marginTop: '2vh'}}>
-                  <Grid item xs={3}><Typography style={{color: "white"}}>Duration</Typography></Grid>
-                  <Grid item xs={3}><Typography style={{color: "white"}}>Company</Typography></Grid>
-                  <Grid item xs={3}><Typography style={{color: "white"}}>Position</Typography></Grid>
+                  <Grid item xs={3}><Typography>Duration</Typography></Grid>
+                  <Grid item xs={3}><Typography>Company</Typography></Grid>
+                  <Grid item xs={3}><Typography>Position</Typography></Grid>
                   <Grid item xs={3}></Grid>
               </Grid>
                 {
                   experience.map(ExperienceField)
                 }
                 <div>
-                  {expAdd ? <AddCircleIcon style={{color: "white"}} onClick={() => setExpAdd(false)} /> : 
+                  {expAdd ? <AddCircleIcon onClick={() => setExpAdd(false)} /> : 
                     <div>
                       <Grid container style={{marginTop: '2vh'}}>
                         <Grid item xs={3}>
                           <input type="text" style={{width: "20vh"}} name="experience" placeholder="duration" onChange={(event) => {
-                            let experienceVarCopy = experienceVar
-                            experienceVarCopy.duration = event.target.value
-                            setExperienceVar(experienceVarCopy)
+                            setExperienceVar({...experienceVar, duration: event.target.value})
                           }} />
                         </Grid>
                         <Grid item xs={3}>
-                          <input type="text" style={{width: "20vh"}} name="experience" placeholder="company" onChange={(event) => {
-                            let experienceVarCopy = experienceVar
-                            experienceVarCopy.company = event.target.value
-                            setExperienceVar(experienceVarCopy)
+                          <input type="text" required={true} style={{width: "20vh"}} name="experience" placeholder="company" onChange={(event) => {
+                            setExperienceVar({...experienceVar, company: event.target.value})
                           }} />
                         </Grid>
                         <Grid item xs={3}>
                           <input type="text" style={{width: "20vh"}} name="experience" placeholder="position" onChange={(event) => {
-                            let experienceVarCopy = experienceVar
-                            experienceVarCopy.position = event.target.value
-                            setExperienceVar(experienceVarCopy)
+                            setExperienceVar({...experienceVar, position: event.target.value})
                           }} />
                         </Grid>
                         <Grid item xs={2} style={{alignItems: 'left'}}>
@@ -197,44 +227,67 @@ function App() {
                 <Grid item xs={3} style={{display: 'flex', justifyContent: 'center'}}>
                 </Grid>
               <Grid item xs={6} style={{justifyContent: 'center'}}>
-                <Typography style={{color: "white"}}>SKILLS</Typography>
+                <Typography>SKILLS</Typography>
               </Grid>
               <Grid item xs={3}></Grid>
               </Grid>
               <Grid container style={{marginTop: '2vh'}}>
                   <Grid item xs={3}></Grid>
                   <Grid item xs={6}>
-                    <ChipInput
-                      newChipKeys={['Enter', ',']}
-                      InputProps={{
-                        color: 'primary',
-                        // autoFocus: true,
-                        autoComplete: 'react'
-                      }}
-                      dataSource={['react', 'react native', 'java', 'python', 'kotlin', 'dart', 'javascript', 'C', 'C#', 'C++', 'angular', 'PHP']}
-                                  value={chipArray}
-                      onAdd={(chip) => handleAddChip(chip)}
-                      onDelete={(chip, index) => {
-                        handleDeleteChip(chip, index)
-                        
-                      }}
-                      placeholder="ADD SKILL"
-                      variant="filled"
+                    
+                    <Select
+                      closeMenuOnSelect={true}
+                      components={animatedComponents}
+                      defaultValue={skills}
+                      isMulti={true}                
+                      options={options}
+                      onChange={setSkills}
                     />
+
+                    
                   </Grid>
                   <Grid item xs={3}></Grid>
               </Grid>
-                {
-                  experience.map(ExperienceField)
-                }
                 <div>
 
                 </div>
             </div>
         </div>
+        <div style={{marginTop: '2vh'}}>
+          <Grid container>
+            <Grid item xs={3}></Grid>
+            <Grid item xs={6}>
+              <Button variant='contained' type="submit" onClick={() => {
+                if(education.length > 0 && experience.length > 0) {
+                  let toSubmit = {
+                    basic,
+                    education,
+                    experience,
+                    skills
+                  }
+                  setSubmitData(toSubmit)
+                  SetSubmitted(true)
+                } else {
+                  alert('You Should Add details about education and experience')
+                }
+              }}>SUBMIT</Button>
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={1}></Grid>
+          </Grid>
+        </div>
+        </form>
       </div>
     </div>
-  );
+  );} else {
+    return(
+      <div>
+        <div>
+          <Gen data={submitData} skillOptions={options} editData={(i) => editData(i)} />
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
