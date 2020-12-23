@@ -56,8 +56,6 @@ const Edit = (props) => {
                             educationCopy.splice(i, 1)
                             console.log(educationCopy)
                             setDat({...dat, education: educationCopy})
-                        } else {
-                            alert('podo pullee')
                         }
                     }} />
                 </Grid>
@@ -100,8 +98,6 @@ const Edit = (props) => {
                         if(experienceCopy[i] === exp){
                             experienceCopy.splice(i, 1)
                             setDat({...dat, experience: experienceCopy})
-                        } else {
-                            alert('podo pullee')
                         }
                     }} />
                 </Grid>

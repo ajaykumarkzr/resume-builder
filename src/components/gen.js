@@ -1,59 +1,17 @@
-import React, { useState } from 'react';
-import { Button, Card, Grid, Typography } from '@material-ui/core';
+import React, { useState, useRef } from 'react';
+import { Button, Grid, Typography } from '@material-ui/core';
+import { useReactToPrint } from 'react-to-print';
 import Edit from './edit';
+import EditIcon from '@material-ui/icons/Edit';
 import './gen.css';
 
 const Gen = (props) => {
-    // const [dat, setDat] = useState(props.data)
-    const [dat, setDat] = useState({
-        basic: {
-            name: 'ajay',
-            address: 'pookkunniyil',
-            email: 'ajaykumar@hmlom',
-            phone: '9961060517'
-        }, 
-        education: [
-            {
-                class: '10',
-                duration: '1 year',
-                school: 'PTM HS',
-                course: 'SSLC'
-            }, {
-                class: '12',
-                duration: '1 year',
-                school: 'chss chalavara',
-                course: 'hse'
-            }, {
-                class: 'Graduation',
-                duration: '4 year',
-                school: 'jcet',
-                course: 'B.Tech'
-            }
-        ],
-        experience: [
-            {
-                company: 'quest',
-                duration: '3 months',
-                position: 'dev'
-            }, {
-                company: 'riafy',
-                duration: '3 months',
-                position: 'react dev'
-            }
-        ],
-        skills: [
-            {
-                label: 'react',
-                value: 'react'
-            }, {
-                label: 'react native',
-                value: 'react native'
-            }, {
-                label: 'js',
-                value: 'js'
-            }
-        ]
-    })
+    const [dat, setDat] = useState(props.data)
+
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+      });
 
     const [editEnabled, setEditEnabled] = useState(false);
     const editData = (value) => {
@@ -67,8 +25,8 @@ const Gen = (props) => {
                         <Grid container key={i}>
                             <Grid item xs={3}><Typography className="field">{edu.class}</Typography></Grid>
                             <Grid item xs={3}><Typography className="field">{edu.duration}</Typography></Grid>
-                            <Grid item xs={3}><Typography className="field">{edu.school}</Typography></Grid>
-                            {edu.course ? <Grid item xs={3}><Typography className="field">{edu.course}</Typography></Grid> : null}
+                            <Grid item xs={4}><Typography className="field">{edu.school}</Typography></Grid>
+                            {edu.course ? <Grid item xs={2}><Typography className="field">{edu.course}</Typography></Grid> : null}
                         </Grid>
         );
     }
@@ -97,10 +55,10 @@ const Gen = (props) => {
         return(
             <>
                 <div>
-                    <div>
-                        <Button variant="contained" onClick={() => {setEditEnabled(true)}}>EDIT</Button>
+                    <div style={{marginTop: '2rem', marginRight: '3rem', display: 'flex', justifyContent: 'flex-end'}}>
+                        <EditIcon variant="contained" onClick={() => {setEditEnabled(true)}}>EDIT</EditIcon>
                     </div>
-                    <Card className="containerCard" elevation={6}>
+                    <div className="containerCard" ref={componentRef}>
                         <Grid container>
                             <Grid item xs={4}>
                                 <Typography className="fieldName">
@@ -157,7 +115,10 @@ const Gen = (props) => {
                                 {dat.skills.map(skillsRender)}
                             </Grid>
                         </Grid>
-                    </Card>
+                    </div>
+                    <div style={{textAlign: 'center', marginTop: '2vh'}}>
+                        <Button variant='contained' onClick={() => handlePrint()} >PRINT</Button>
+                    </div>
                 </div>
             </>
         );

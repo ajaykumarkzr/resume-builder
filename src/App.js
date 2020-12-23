@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
@@ -52,11 +53,10 @@ function App() {
   const animatedComponents = makeAnimated();
 
   
-  const [submitted, SetSubmitted] = useState(true);
+  const [submitted, SetSubmitted] = useState(false);
   const [submitData, setSubmitData] = useState(null);
 
   const editData = (i) => {
-    alert('working')
     setBasic(i.basic)
     setEducation(i.education)
     setExperience(i.experience)
@@ -70,9 +70,41 @@ function App() {
     return(
       <div key={i}>
         <br />
-          <Typography>
-            {edu.school}
-          </Typography>
+        <Grid container>
+          <Grid item xs={3}>
+            <select value={education[i].class} onChange={(event) => {
+              let eduCopy = education
+              eduCopy[i].class = event.target.value
+              setEducation(eduCopy)
+            }}>
+              <option value="Select">Select</option>
+              <option value="10">10</option>
+              <option value="12">12</option>
+              <option value="Graduation">Graduation</option>
+              <option value="Other"> Other</option>
+            </select>
+          </Grid>
+          <Grid item xs={3}>
+            <TextField defaultValue={education[i].school} onChange={(event) => {
+              let eduCopy = education
+              eduCopy[i].school = event.target.value
+              setEducation(eduCopy)
+            }}>
+              {edu.school}
+            </TextField>
+          </Grid>
+          <Grid item xs={3}><TextField defaultValue={education[i].duration} onChange={(event) => {
+            let eduCopy = education
+            eduCopy[i].duration = event.target.value
+            setEducation(eduCopy)
+          }} /></Grid>
+          <Grid item xs={3}><TextField defaultValue={education[i].course} onChange={(event) => {
+            let eduCopy = education
+            eduCopy[i].course = event.target.value
+            setEducation(eduCopy)
+            console.log(education)
+          }} /></Grid>
+        </Grid>
       </div>
     )
   }
@@ -80,10 +112,22 @@ function App() {
   const ExperienceField = (exp, i) => {
     return(
       <div key={i}>
-        <Grid container style={{marginTop: '2vh'}}>
-          <Grid item xs={3}><Typography>{exp.duration}</Typography></Grid>
-          <Grid item xs={3}><Typography>{exp.company}</Typography></Grid>
-          <Grid item xs={3}><Typography>{exp.position}</Typography></Grid>
+        <Grid container style={{marginTop: '2vh', }}>
+          <Grid item xs={3}><TextField defaultValue={exp.duration} onChange={(event) => {
+            let expCopy = experience
+            expCopy[i].duration = event.target.value
+            setExperience(expCopy)
+          }} /></Grid>
+          <Grid item xs={3}><TextField defaultValue={exp.company} onChange={(event) => {
+            let expCopy = experience
+            expCopy[i].company = event.target.value
+            setExperience(expCopy)
+          }} /></Grid>
+          <Grid item xs={3}><TextField defaultValue={exp.position} onChange={(event) => {
+            let expCopy = experience
+            expCopy[i].position = event.target.value
+            setExperience(expCopy)
+          }} /></Grid>
           <Grid item xs={3}></Grid>
         </Grid>
       </div>
@@ -95,16 +139,16 @@ function App() {
     <div className="App">
       <div className="App-header">
         <form>
-            <input type="text" id="name" name="name" value={basic.name} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
+            <TextField type="text" id="name" name="name" value={basic.name} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
                 setBasic({...basic, name: event.target.value})
               }} placeholder="NAME" /> <br />
-            <input type="text" id="email" name="email" value={basic.email} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
+            <TextField type="text" id="email" name="email" value={basic.email} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
                 setBasic({...basic, email: event.target.value})
               }} placeholder="EMAIL" /> <br />
-            <input type="text" id="address" name="address" value={basic.address} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
+            <TextField type="text" id="address" name="address" value={basic.address} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
               setBasic({...basic, address: event.target.value})
             }} placeholder="ADDRESS" /> <br />
-            <input type="text" id="phone" name="phone" value={basic.phone} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
+            <TextField type="text" id="phone" name="phone" value={basic.phone} style={{width: '30vw', marginTop: '2vh'}} onChange={(event) => {
               setBasic({...basic, phone: event.target.value})
             }} placeholder="PHONE" /> <br />
         
@@ -130,17 +174,17 @@ function App() {
                     </select>
                   </Grid>
                   <Grid item xs={4} style={{alignItems: 'left'}}>
-                    <input type="text" required={true} name="education" style={{width: '30vw'}} value={educationVar.school} onChange={(event) => {
+                    <TextField type="text" required={true} name="education" style={{width: '30vw'}} value={educationVar.school} onChange={(event) => {
                       setEducationVar({...educationVar, school: event.target.value})
                     }} placeholder="ADD SCHOOL" />
                   </Grid>
                   <Grid item xs={2}>
-                    <input type="text" name="" placeholder="course" onChange={(event) => {
+                    <TextField type="text" name="" placeholder="course" onChange={(event) => {
                       setEducationVar({...educationVar, course: event.target.value})
                     }} />
                   </Grid>
                   <Grid item xs={2}>
-                    <input type="text" name="eduDuration" placeholder="duration" onChange={(event) => {
+                    <TextField type="text" name="eduDuration" placeholder="duration" onChange={(event) => {
                       setEducationVar({...educationVar, duration: event.target.value})
                     }} />
                   </Grid>
@@ -180,25 +224,27 @@ function App() {
                   <Grid item xs={3}><Typography>Position</Typography></Grid>
                   <Grid item xs={3}></Grid>
               </Grid>
+              <div style={{marginTop: '2vh'}}>
                 {
                   experience.map(ExperienceField)
                 }
+                </div>
                 <div>
                   {expAdd ? <AddCircleIcon onClick={() => setExpAdd(false)} /> : 
                     <div>
                       <Grid container style={{marginTop: '2vh'}}>
                         <Grid item xs={3}>
-                          <input type="text" style={{width: "20vh"}} name="experience" placeholder="duration" onChange={(event) => {
+                          <TextField type="text" style={{width: "20vh"}} name="experience" placeholder="duration" onChange={(event) => {
                             setExperienceVar({...experienceVar, duration: event.target.value})
                           }} />
                         </Grid>
                         <Grid item xs={3}>
-                          <input type="text" required={true} style={{width: "20vh"}} name="experience" placeholder="company" onChange={(event) => {
+                          <TextField type="text" required={true} style={{width: "20vh"}} name="experience" placeholder="company" onChange={(event) => {
                             setExperienceVar({...experienceVar, company: event.target.value})
                           }} />
                         </Grid>
                         <Grid item xs={3}>
-                          <input type="text" style={{width: "20vh"}} name="experience" placeholder="position" onChange={(event) => {
+                          <TextField type="text" style={{width: "20vh"}} name="experience" placeholder="position" onChange={(event) => {
                             setExperienceVar({...experienceVar, position: event.target.value})
                           }} />
                         </Grid>
